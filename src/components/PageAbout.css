@@ -1,0 +1,210 @@
+/* Estilo general */
+.portfolio-container {
+    font-family: 'Poppins', sans-serif;
+    background-color: #1a1a1a;
+    color: #fff;
+    padding: 40px 20px;
+    text-align: center;
+    box-sizing: border-box;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  
+  /* Sección de perfil */
+  .profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    color: #1cd4e5;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  
+  .subtitle {
+    font-size: 1.5rem;
+    color: #ffffff;
+  }
+  
+  .description {
+    font-size: 1.1rem;
+    color: #ffffff;
+    line-height: 1.6;
+    margin-top: 20px;
+  }
+  
+  /* Sección de educación y experiencia */
+  .section-subtitle {
+    font-size: 1.5rem;
+    color:#63f2ff;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .description ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  .description ul li {
+    margin-bottom: 5px;
+  }
+  
+  /* Sección de habilidades */
+  .skills-title {
+    font-size: 2rem;
+    color: #63f2ff;
+    margin-bottom: 20px;
+  }
+  
+  .skill-link {
+    text-decoration: none;
+    display: block;
+    margin: 10px;
+  }
+  /* Estilo para las tarjetas de habilidades */
+  .skill-card {
+    background-color: transparent; /* Fondo transparente */
+    border: 2px solid#63f2ff; /* Borde brillante */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 20px; /* Agregado más relleno para que el contenido no esté tan pegado */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Sombra ligera */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animación suave para hover */
+  }
+  
+  /* Efecto hover en la tarjeta */
+  .skill-card:hover {
+    transform: translateY(-5px); /* Efecto de elevación al pasar el ratón */
+    box-shadow: 0 6px 20px #63f2ff; /* Sombra más brillante al pasar el ratón */
+  }
+  
+  /* Estilo para el contenido de la tarjeta */
+  .skill-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent; /* Fondo transparente */
+    padding: 10px;
+    text-align: center;
+  }
+  
+  /* Estilo para los iconos de las habilidades */
+  .skill-icon {
+    width: 60px; /* Ajusta el tamaño de los iconos */
+    height: 60px;
+    margin-bottom: 10px; /* Espaciado entre el icono y el nombre */
+    transition: transform 0.3s ease; /* Efecto de animación para los iconos */
+  }
+  
+  /* Efecto hover en los iconos */
+  .skill-icon:hover {
+    transform: scale(1.2); /* Aumentar el tamaño del icono al pasar el ratón */
+  }
+  
+  /* Estilo para los nombres de las habilidades */
+  .skill-name {
+    font-size: 1rem; /* Tamaño de fuente */
+    color: #ffffff; /* Color blanco para los nombres */
+    font-weight: bold;
+    text-transform: uppercase; /* Convertir a mayúsculas */
+    letter-spacing: 1px; /* Separación entre letras */
+    margin-top: 10px; /* Espaciado entre el icono y el nombre */
+  }
+  
+  /* Enlace sin subrayado */
+  .skill-link {
+    text-decoration: none; /* Eliminar subrayado en el enlace */
+    display: block; /* Asegura que el enlace ocupe todo el espacio de la tarjeta */
+    margin: 10px;
+  }
+  
+  /* Sección de contacto */
+  .contact-title {
+    font-size: 2rem;
+    color:  #63f2ff;
+    margin-bottom: 15px;
+  }
+  
+  /* Fondo de la página */
+  .background {
+    background-image: url('https://plus.unsplash.com/premium_photo-1661877737564-3dfd7282efcb?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Zm9uZG8lMjBkZSUyMHBhbnRhbGxhJTIwZGUlMjBwcm9ncmFtYWNpb258ZW58MHx8MHx8fDA%3D');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    filter: brightness(70%);
+    height: 180vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  
+  .background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: -1;
+  }
+  
+  /* Estilo para el contenedor de texto */
+  .portfolio-container {
+    text-align: center;
+    padding: 2rem 3rem;
+    border-radius: 1rem;
+    background: rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 80%;
+    width: 100%;
+    margin: 0 auto;
+    border-color: #63f2ff;
+  }
+  
+  @media (max-width: 600px) {
+    .portfolio-container {
+      padding: 1.5rem;
+    }
+  
+    .title {
+      font-size: 2rem;
+    }
+  
+    .subtitle {
+      font-size: 1.2rem;
+    }
+  
+    .description {
+      font-size: 1rem;
+    }
+  
+    .skill-link {
+      width: 80px;
+    }
+  
+    .contact-title {
+      font-size: 1.5rem;
+    }
+  
+    .skill-icon {
+      width: 50px;
+      height: 50px;
+    }
+  }
