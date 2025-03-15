@@ -1,21 +1,24 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Home from './pages/Home';
-import Playlists from './pages/Playlists';
-import Artists from './pages/Artists';
-import Audiobooks from './pages/Audiobooks';
-import Categories from './pages/Categories';
-import PageAbout from './components/PageAbout';
+// src/AppRoutes.jsx
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import Artists from "./pages/Artistas/Artists";
+import ArtistDetail from "./pages/Artistas/ArtistDetail";
+import PageAbout from "./components/aboutus/PageAbout";
+import Login from "./components/iniciarsesion";
+import Callback from "./components/Callback";
+import Dashboard from "./components/Dashboard";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/callback" element={<Callback />} />
+      {/* Se mueve Login a una ruta específica */}
+      <Route path="/" element={<Login />} />
       <Route path="/aboutus" element={<PageAbout />} />
-      <Route path="/playlists" element={<Playlists />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/artists" element={<Artists />} />
-      <Route path="/audiobooks" element={<Audiobooks />} />
-      <Route path="/categories" element={<Categories />} />
+      <Route path="/artist/:id" element={<ArtistDetail />} />
+      
     </Routes>
   );
 };

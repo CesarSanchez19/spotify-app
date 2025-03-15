@@ -1,0 +1,59 @@
+/* ErrorMessage.css - Enhanced Spotify-like design */
+.error-message {
+    background-color: rgba(255, 85, 85, 0.1);
+    border-left: 4px solid #ff5555;
+    padding: 24px;
+    margin: 30px 0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 8px 16px rgba(255, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    animation: slideIn 0.4s ease-out;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .error-message:hover {
+    background-color: rgba(255, 85, 85, 0.15);
+    box-shadow: 0 12px 24px rgba(255, 0, 0, 0.15);
+  }
+  
+  .error-icon {
+    font-size: 28px;
+    margin-right: 20px;
+    animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  
+  @keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+  
+  .error-message p {
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 500;
+  }

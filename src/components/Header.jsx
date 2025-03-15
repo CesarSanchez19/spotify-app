@@ -11,11 +11,11 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["About me"];
+// Importar íconos más apropiados para una app de música
+import HeadphonesIcon from "@mui/icons-material/Headphones";
+import HomeIcon from "@mui/icons-material/Home";
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -37,36 +37,53 @@ function Header() {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "black" }}>
+    <AppBar 
+      position="static" 
+      sx={{ 
+        background: "linear-gradient(90deg, #1DB954 0%, #191414 100%)",
+        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.25)",
+      }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          {/* Logo para pantallas medianas y grandes */}
+          <HeadphonesIcon 
+            sx={{ 
+              display: { xs: "none", md: "flex" }, 
+              mr: 1,
+              fontSize: 32,
+              color: "#FFFFFF"
+            }} 
+          />
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/home"
             sx={{
-              mr: 2,
+              mr: 4,
               display: { xs: "none", md: "flex" },
-              fontFamily: "sans-serif",
-              letterSpacing: ".3rem",
-              color: "inherit",
+              fontFamily: "'Montserrat', sans-serif",
+              letterSpacing: ".1rem",
+              color: "#FFFFFF",
               textDecoration: "none",
-              fontWeight: "bold",
+              fontWeight: 700,
+              fontSize: "1.5rem",
+              textShadow: "0px 2px 4px rgba(0,0,0,0.3)"
             }}
           >
             Cesar Sanchez
           </Typography>
 
+          {/* Menú móvil */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              sx={{ color: "#FFFFFF" }}
             >
               <MenuIcon />
             </IconButton>
@@ -84,76 +101,135 @@ function Header() {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
+              sx={{ 
+                display: { xs: "block", md: "none" },
+                "& .MuiPaper-root": {
+                  backgroundColor: "#191414",
+                  color: "#FFFFFF"
+                }
+              }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={handleCloseNavMenu} component={Link} to="/playlists">
+                <Typography sx={{ textAlign: "center", display: "flex", alignItems: "center" }}>
+                  <HomeIcon sx={{ mr: 1, fontSize: 20 }} /> Playlists
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu} component={Link} to="/artists">
+                <Typography sx={{ textAlign: "center", display: "flex", alignItems: "center" }}>
+                  <HomeIcon sx={{ mr: 1, fontSize: 20 }} /> Artistas
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu} component={Link} to="/audiobooks">
+                <Typography sx={{ textAlign: "center", display: "flex", alignItems: "center" }}>
+                  <HomeIcon sx={{ mr: 1, fontSize: 20 }} /> Audio Libros
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu} component={Link} to="/episodes">
+                <Typography sx={{ textAlign: "center", display: "flex", alignItems: "center" }}>
+                  <HomeIcon sx={{ mr: 1, fontSize: 20 }} /> Episodios
+                </Typography>
+              </MenuItem>
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
+
+          {/* Menú de navegación para pantallas medianas y grandes */}
+          <Box 
+            sx={{ 
+              flexGrow: 1, 
+              display: { xs: "none", md: "flex" },
+              justifyContent: "center",
+              gap: 2
             }}
           >
-            LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Button
-              component={Link}
-              to="/playlists"
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block", fontSize: "16px" }}
-            >
-              PlayLists
-            </Button>
             <Button
               component={Link}
               to="/artists"
               onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block", fontSize: "16px" }}
+              sx={{ 
+                color: "#FFFFFF", 
+                display: "flex", 
+                alignItems: "center",
+                fontWeight: 600,
+                borderRadius: "50px",
+                px: 3,
+                py: 1,
+                transition: "all 0.3s",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  transform: "translateY(-2px)"
+                }
+              }}
             >
               Artistas
             </Button>
             <Button
               component={Link}
-              to="/audiobooks"
+              to="/playlists"
               onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block", fontSize: "16px" }}
+              sx={{ 
+                color: "#FFFFFF", 
+                display: "flex", 
+                alignItems: "center",
+                fontWeight: 600,
+                borderRadius: "50px",
+                px: 3,
+                py: 1,
+                transition: "all 0.3s",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  transform: "translateY(-2px)"
+                }
+              }}
             >
-              Audio Libros
-            </Button>
-            <Button
-              component={Link}
-              to="/categories"
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block", fontSize: "16px" }}
-            >
-              Categorias
+              Playlists
             </Button>
           </Box>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="https://avatars.githubusercontent.com/u/181114153?v=4" />
+
+          {/* Buscador y perfil */}
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <IconButton
+              size="large"
+              aria-label="search"
+              color="inherit"
+              sx={{ 
+                mr: 2,
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                }
+              }}
+            >
+            </IconButton>
+            
+            <Tooltip title="Perfil">
+              <IconButton 
+                onClick={handleOpenUserMenu} 
+                sx={{ 
+                  p: 0,
+                  border: "2px solid #1DB954",
+                  transition: "all 0.3s",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                    boxShadow: "0 0 10px rgba(29, 185, 84, 0.5)"
+                  }
+                }}
+              >
+                <Avatar 
+                  alt="Cesar Sanchez" 
+                  src="https://avatars.githubusercontent.com/u/181114153?v=4" 
+                  sx={{ width: 40, height: 40 }}
+                />
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ 
+                mt: "45px",
+                "& .MuiPaper-root": {
+                  backgroundColor: "#191414",
+                  color: "#FFFFFF",
+                  borderRadius: "8px",
+                  boxShadow: "0 4px 20px rgba(0, 0, 0, 0.5)"
+                }
+              }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -168,18 +244,15 @@ function Header() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Button
-                    component={Link}
-                    to="/aboutus"
-                    onClick={handleCloseUserMenu}
-                    sx={{ my: 2, color: "black", display: "block", fontSize: "16px" }}
-                  >
-                    About Me
-                  </Button>
-                </MenuItem>
-              ))}
+              <MenuItem component={Link} to="/aboutus" onClick={handleCloseUserMenu}>
+                <Typography sx={{ 
+                  color: "#FFFFFF", 
+                  fontWeight: 500,
+                  px: 1
+                }}>
+                  About Me
+                </Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
@@ -187,4 +260,5 @@ function Header() {
     </AppBar>
   );
 }
+
 export default Header;
