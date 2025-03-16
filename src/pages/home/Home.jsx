@@ -190,7 +190,7 @@ const Home = () => {
               textShadow: '0px 4px 8px rgba(0,0,0,0.4)' // Sombra en el texto para efecto de profundidad
             }}
           >
-            Spotify Explorer {/* Título principal de la página */}
+            Spotifapi Web {/* Título principal de la página */}
           </Typography>
           
           <Typography 
