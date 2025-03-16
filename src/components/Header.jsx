@@ -16,6 +16,9 @@ import { Link } from "react-router-dom";
 // Importar íconos más apropiados para una app de música
 import HeadphonesIcon from "@mui/icons-material/Headphones";
 import HomeIcon from "@mui/icons-material/Home";
+import PersonIcon from '@mui/icons-material/Person';
+import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import PodcastsIcon from '@mui/icons-material/Podcasts';
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -109,24 +112,24 @@ function Header() {
                 }
               }}
             >
-              <MenuItem onClick={handleCloseNavMenu} component={Link} to="/playlists">
+              <MenuItem onClick={handleCloseNavMenu} component={Link} to="/">
                 <Typography sx={{ textAlign: "center", display: "flex", alignItems: "center" }}>
-                  <HomeIcon sx={{ mr: 1, fontSize: 20 }} /> Playlists
+                  <HomeIcon sx={{ mr: 1, fontSize: 20 }} /> Inicio
                 </Typography>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu} component={Link} to="/artists">
                 <Typography sx={{ textAlign: "center", display: "flex", alignItems: "center" }}>
-                  <HomeIcon sx={{ mr: 1, fontSize: 20 }} /> Artistas
+                  <PersonIcon sx={{ mr: 1, fontSize: 20 }} /> Artistas
                 </Typography>
               </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu} component={Link} to="/audiobooks">
+              <MenuItem onClick={handleCloseNavMenu} component={Link} to="/tracks">
                 <Typography sx={{ textAlign: "center", display: "flex", alignItems: "center" }}>
-                  <HomeIcon sx={{ mr: 1, fontSize: 20 }} /> Audio Libros
+                  <QueueMusicIcon sx={{ mr: 1, fontSize: 20 }} /> Canciones
                 </Typography>
               </MenuItem>
-              <MenuItem onClick={handleCloseNavMenu} component={Link} to="/episodes">
+              <MenuItem onClick={handleCloseNavMenu} component={Link} to="/podcasts">
                 <Typography sx={{ textAlign: "center", display: "flex", alignItems: "center" }}>
-                  <HomeIcon sx={{ mr: 1, fontSize: 20 }} /> Episodios
+                  <PodcastsIcon sx={{ mr: 1, fontSize: 20 }} /> Podcasts
                 </Typography>
               </MenuItem>
             </Menu>
