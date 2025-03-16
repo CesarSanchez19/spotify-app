@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+// Importamos useParams para extraer el ID del artista desde la URL y Link para la navegación interna
 import { useParams, Link } from 'react-router-dom';
+// Importamos componentes de Material UI para construir la interfaz de usuario
 import {
   Box,
   Typography,
@@ -13,7 +15,9 @@ import {
   Grid,
   IconButton
 } from '@mui/material';
+// Importamos alpha para aplicar transparencias a los colores
 import { alpha } from '@mui/material/styles';
+// Importamos iconos para mejorar la experiencia visual y la interacción del usuario
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import PeopleIcon from '@mui/icons-material/People';
@@ -23,51 +27,66 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import LaunchIcon from '@mui/icons-material/Launch';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+// Importamos funciones de la API de Spotify para obtener datos del artista, sus canciones más populares y el token de acceso
 import { getArtist, getArtistTopTracks, getAccessToken } from '../../spotify/api';
 
 function ArtistDetail() {
+  // Estados para almacenar datos del artista, sus top tracks, y manejar la carga, errores y la reproducción de pistas
   const [artist, setArtist] = useState(null);
   const [topTracks, setTopTracks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // Estado para saber qué pista se está reproduciendo actualmente (por su ID)
   const [playingTrack, setPlayingTrack] = useState(null);
+  // Extraemos el ID del artista desde la URL mediante useParams
   const { id } = useParams();
 
+  // Efecto para cargar datos del artista y sus canciones más populares al montar el componente o cuando cambia el ID
   useEffect(() => {
     const fetchArtistData = async () => {
-      setLoading(true);
+      setLoading(true); // Inicia el estado de carga
       try {
+        // Se obtiene el token de acceso necesario para las peticiones a la API de Spotify
         const token = await getAccessToken();
+        // Se realizan dos peticiones en paralelo para obtener la información del artista y sus top tracks
         const [artistData, tracksData] = await Promise.all([
           getArtist(token, id),
           getArtistTopTracks(token, id),
         ]);
+        // Se actualizan los estados con los datos obtenidos
         setArtist(artistData);
         setTopTracks(tracksData);
       } catch (error) {
+        // En caso de error, se actualiza el estado y se muestra un mensaje en consola
         setError('Error al cargar los datos del artista');
         console.error('Error al cargar datos:', error);
       } finally {
+        // Finaliza el estado de carga
         setLoading(false);
       }
     };
     fetchArtistData();
   }, [id]);
 
+  // Función para manejar la reproducción y pausa de una pista de vista previa
   const handlePlayPause = (trackId) => {
+    // Si la pista que se intenta reproducir ya está en reproducción
     if (playingTrack === trackId) {
       const audioElement = document.getElementById(`audio-${trackId}`);
-      audioElement.pause();
+      audioElement.pause(); // Se pausa la reproducción
       setPlayingTrack(null);
     } else {
+      // Si hay alguna pista ya reproduciéndose, se pausa primero
       if (playingTrack) {
         const currentAudio = document.getElementById(`audio-${playingTrack}`);
         if (currentAudio) currentAudio.pause();
       }
+      // Se obtiene el elemento de audio correspondiente al track y se inicia la reproducción
       const audioElement = document.getElementById(`audio-${trackId}`);
       if (audioElement) {
         audioElement.play();
         setPlayingTrack(trackId);
+        // Al finalizar la reproducción, se reinicia el estado de reproducción
         audioElement.onended = () => {
           setPlayingTrack(null);
         };
@@ -75,12 +94,14 @@ function ArtistDetail() {
     }
   };
 
+  // Función auxiliar para formatear la duración de una pista en minutos y segundos
   const formatDuration = (ms) => {
     const minutes = Math.floor(ms / 60000);
     const seconds = Math.floor((ms % 60000) / 1000);
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  // Renderizado mientras se cargan los datos: se muestra un indicador de carga centrado
   if (loading) {
     return (
       <Box 
@@ -97,6 +118,7 @@ function ArtistDetail() {
     );
   }
 
+  // Si ocurre algún error, se muestra un mensaje de error dentro de un Alert
   if (error) {
     return (
       <Box 
@@ -123,6 +145,7 @@ function ArtistDetail() {
     );
   }
 
+  // Si no se encontró el artista, se muestra un mensaje de artista no encontrado junto con un botón para volver a la búsqueda
   if (!artist) {
     return (
       <Box 
@@ -161,6 +184,7 @@ function ArtistDetail() {
     );
   }
 
+  // Se definen las imágenes para el banner y la foto de perfil basándose en el arreglo de imágenes del artista
   const bannerImage = artist.images && artist.images.length > 0 
     ? artist.images[0].url 
     : null;
@@ -178,17 +202,18 @@ function ArtistDetail() {
         pb: 8
       }}
     >
-      {/* Hero Banner con overlay */}
+      {/* Sección del Hero Banner con overlay y elementos posicionados */}
       <Box
         sx={{
           position: 'relative',
           height: { xs: '280px', md: '360px' },
-          // Cambiamos overflow de 'hidden' a 'visible'
+          // Se establece overflow visible para permitir elementos posicionados fuera del contenedor
           overflow: 'visible',
           mb: { xs: 10, md: 12 }
         }}
       >
         {bannerImage ? (
+          // Muestra el banner con la imagen del artista, aplicando un filtro de brillo para mejorar la legibilidad del overlay
           <Box
             component="img"
             src={bannerImage}
@@ -203,6 +228,7 @@ function ArtistDetail() {
             }}
           />
         ) : (
+          // Si no hay imagen, se muestra un fondo degradado alternativo
           <Box
             sx={{
               width: '100%',
@@ -214,7 +240,7 @@ function ArtistDetail() {
           />
         )}
         
-        {/* Overlay por encima del banner */}
+        {/* Overlay que oscurece el banner para mejorar la visibilidad del texto */}
         <Box
           sx={{
             position: 'absolute',
@@ -227,8 +253,9 @@ function ArtistDetail() {
           }}
         />
         
+        {/* Contenedor que aloja el botón de volver y otros elementos superpuestos */}
         <Container maxWidth="lg" sx={{ position: 'relative', height: '100%' }}>
-          {/* Botón Volver */}
+          {/* Botón para volver a la lista de artistas */}
           <Button
             component={Link}
             to="/artists"
@@ -244,7 +271,7 @@ function ArtistDetail() {
               px: 2,
               py: 1,
               fontWeight: 600,
-              zIndex: 3, // Por encima del overlay
+              zIndex: 3, // Se posiciona por encima del overlay
               '&:hover': {
                 bgcolor: alpha('#000', 0.7),
                 transform: 'translateX(-5px)',
@@ -255,7 +282,7 @@ function ArtistDetail() {
             Volver
           </Button>
           
-          {/* Imagen de perfil con zIndex superior */}
+          {/* Imagen de perfil del artista, posicionada para sobresalir del banner */}
           <Box
             sx={{
               position: 'absolute',
@@ -267,7 +294,7 @@ function ArtistDetail() {
               overflow: 'hidden',
               boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
               border: '4px solid #121212',
-              zIndex: 4 // Más alto que el overlay (2) y el banner (1)
+              zIndex: 4 // Se posiciona por encima del banner y overlay
             }}
           >
             {profileImage ? (
@@ -282,6 +309,7 @@ function ArtistDetail() {
                 }}
               />
             ) : (
+              // Si no hay imagen de perfil, se muestra un ícono alternativo
               <Box
                 sx={{
                   width: '100%',
@@ -300,11 +328,10 @@ function ArtistDetail() {
       </Box>
 
       <Container maxWidth="lg">
-        {/* Información del artista */}
+        {/* Sección de información del artista */}
         <Box
           sx={{
-            // Ajustamos margen superior para que la info no quede tapada
-            mt: { xs: 12, md: 14 },
+            mt: { xs: 12, md: 14 }, // Se agrega margen superior para compensar la imagen de perfil
             mb: 8
           }}
         >
@@ -321,6 +348,7 @@ function ArtistDetail() {
             {artist.name}
           </Typography>
           
+          {/* Muestra información de seguidores y popularidad */}
           <Stack direction="row" spacing={4} sx={{ mb: 3, flexWrap: 'wrap', gap: 2 }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <PeopleIcon sx={{ color: '#b3b3b3', mr: 1 }} />
@@ -355,7 +383,7 @@ function ArtistDetail() {
             </Box>
           </Stack>
           
-          {/* Géneros */}
+          {/* Sección de géneros musicales */}
           {artist.genres.length > 0 && (
             <Box sx={{ mb: 4 }}>
               <Typography variant="h6" sx={{ mb: 2, color: '#dddddd' }}>
@@ -384,7 +412,7 @@ function ArtistDetail() {
             </Box>
           )}
           
-          {/* Botón Spotify */}
+          {/* Botón que redirige al usuario a Spotify para escuchar al artista */}
           {artist.external_urls && artist.external_urls.spotify && (
             <Button
               variant="contained"
@@ -416,7 +444,7 @@ function ArtistDetail() {
           )}
         </Box>
 
-        {/* Sección de Top Tracks */}
+        {/* Sección de Top Tracks del artista */}
         <Paper 
           elevation={0}
           sx={{ 
@@ -427,13 +455,14 @@ function ArtistDetail() {
           }}
         >
           <Box sx={{ p: 4 }}>
+            {/* Encabezado de la sección de canciones más populares */}
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 4 }}>
               <LocalFireDepartmentIcon sx={{ color: '#1DB954', mr: 2, fontSize: 28 }} />
               <Typography 
                 variant="h4" 
                 component="h2" 
                 sx={{
-                    color:"#ffff",
+                  color:"#ffff",
                   fontWeight: 800,
                   position: 'relative',
                   '&:after': {
@@ -452,6 +481,7 @@ function ArtistDetail() {
               </Typography>
             </Box>
             
+            {/* Renderiza los top tracks en un grid; si no hay tracks, muestra un mensaje informativo */}
             {topTracks.length > 0 ? (
               <Grid container spacing={2}>
                 {topTracks.map((track, index) => (
@@ -471,7 +501,7 @@ function ArtistDetail() {
                         }
                       }}
                     >
-                      {/* Reproducción de preview */}
+                      {/* Sección de reproducción: si la pista tiene vista previa, muestra botón Play/Pause; de lo contrario, muestra el número de pista */}
                       {track.preview_url && (
                         <audio
                           id={`audio-${track.id}`}
@@ -479,7 +509,6 @@ function ArtistDetail() {
                         />
                       )}
                       
-                      {/* Botón Play/Pause o número de pista */}
                       <Box 
                         sx={{ 
                           width: 50, 
@@ -515,7 +544,7 @@ function ArtistDetail() {
                         )}
                       </Box>
                       
-                      {/* Carátula del álbum */}
+                      {/* Sección de la carátula del álbum */}
                       <Box
                         sx={{
                           width: 60,
@@ -553,7 +582,7 @@ function ArtistDetail() {
                         )}
                       </Box>
                       
-                      {/* Información de la pista */}
+                      {/* Información de la pista: nombre y álbum */}
                       <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                         <Typography 
                           noWrap 
@@ -578,7 +607,7 @@ function ArtistDetail() {
                         )}
                       </Box>
                       
-                      {/* Duración de la pista */}
+                      {/* Muestra la duración de la pista en minutos y segundos */}
                       <Box 
                         sx={{ 
                           display: 'flex', 
@@ -598,6 +627,7 @@ function ArtistDetail() {
                 ))}
               </Grid>
             ) : (
+              // Si no hay canciones disponibles, se muestra un mensaje centrado
               <Box 
                 sx={{ 
                   p: 4, 

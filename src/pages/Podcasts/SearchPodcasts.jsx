@@ -1,6 +1,10 @@
+// Importamos hooks de React para gestionar estado y efectos secundarios
 import { useState, useEffect } from 'react';
+// Importamos funciones de la API de Spotify para obtener el token y realizar búsquedas de podcasts
 import { getAccessToken, searchPodcasts } from '../../spotify/api';
-import { Link, useNavigate } from 'react-router-dom';
+// Importamos Link de react-router-dom para navegación interna
+import { Link } from 'react-router-dom';
+// Importamos componentes de Material UI para construir la interfaz
 import { 
   Box, 
   Container, 
@@ -14,25 +18,29 @@ import {
   InputAdornment,
   CircularProgress,
 } from '@mui/material';
+// Importamos el componente Grid para estructurar el layout de los resultados
 import Grid from "@mui/material/Grid2";
+// Importamos iconos de Material UI para mejorar la experiencia visual del usuario
 import SearchIcon from '@mui/icons-material/Search';
 import LaunchIcon from '@mui/icons-material/Launch';
 import InfoIcon from '@mui/icons-material/Info';
+// Importamos utilidades para la gestión de temas en Material UI y normalización de estilos CSS
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
+// Definición de un tema personalizado inspirado en Spotify para la aplicación
 const spotifyTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#1DB954', // Spotify green
+      main: '#1DB954', // Color verde característico de Spotify
     },
     secondary: {
-      main: '#1ED760', // Lighter green for hover states
+      main: '#1ED760', // Verde más claro para estados hover
     },
     background: {
-      default: '#121212', // Spotify dark background
-      paper: '#181818', // Spotify card background
+      default: '#121212', // Fondo oscuro de Spotify
+      paper: '#181818', // Fondo para componentes tipo "card"
     },
     text: {
       primary: '#FFFFFF',
@@ -46,29 +54,29 @@ const spotifyTheme = createTheme({
     },
     h6: {
       fontWeight: 700,
-      fontSize: '1.1rem', // Larger heading for card titles
+      fontSize: '1.1rem', // Tamaño mayor para títulos de las cards
     },
     body2: {
-      fontSize: '0.95rem', // Larger text for descriptions
+      fontSize: '0.95rem', // Tamaño mayor para descripciones
     },
     button: {
       textTransform: 'none',
       fontWeight: 700,
-      fontSize: '0.85rem', // Larger text for buttons
+      fontSize: '0.85rem', // Tamaño mayor para el texto de los botones
     },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 500, // Pill-shaped buttons
-          padding: '6px 16px', // Standard padding for buttons
+          borderRadius: 500, // Botones con forma de píldora (muy redondeados)
+          padding: '6px 16px', // Padding estándar para botones
         },
         contained: {
           boxShadow: 'none',
           '&:hover': {
             boxShadow: 'none',
-            backgroundColor: '#1ED760', // Lighter green on hover
+            backgroundColor: '#1ED760', // Verde más claro al hacer hover
           },
         },
       },
@@ -77,12 +85,12 @@ const spotifyTheme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
-          transition: 'all 0.3s ease',
+          transition: 'all 0.3s ease', // Transición suave para efectos hover
           '&:hover': {
-            transform: 'translateY(-4px)',
-            boxShadow: '0 8px 16px rgba(0,0,0,0.3)',
+            transform: 'translateY(-4px)', // Efecto de elevación al pasar el mouse
+            boxShadow: '0 8px 16px rgba(0,0,0,0.3)', // Sombra para resaltar la card
           },
-          width: '100%', // Make sure card takes full width
+          width: '100%', // Asegura que la card ocupe todo el ancho disponible
         },
       },
     },
@@ -90,10 +98,10 @@ const spotifyTheme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            borderRadius: 500,
-            backgroundColor: '#2A2A2A',
+            borderRadius: 500, // Bordes redondeados en el campo de texto
+            backgroundColor: '#2A2A2A', // Fondo oscuro para el TextField
             '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#1DB954',
+              borderColor: '#1DB954', // Cambio de color en el borde al hacer hover
             },
           },
         },
@@ -102,26 +110,31 @@ const spotifyTheme = createTheme({
   },
 });
 
+// Componente funcional SearchPodcasts para buscar y mostrar podcasts
 const SearchPodcasts = (props) => {
-  // Recibir los props adicionales
+  // Recibimos props adicionales para configurar la vista del componente
   const { isHomePreview, maxItems, searchTermOverride, hideSearchBar } = props;
+  // Determina si se debe ocultar la barra de búsqueda, ya sea por configuración o vista previa en la home
   const shouldHideSearchBar = hideSearchBar || isHomePreview;
   
+  // Estados para gestionar token, término de búsqueda, resultados, carga y errores
   const [token, setToken] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
 
-  // 1) OBTENCIÓN DEL TOKEN (efecto separado)
+  // 1) OBTENCIÓN DEL TOKEN: se ejecuta al montar el componente
   useEffect(() => {
     const fetchToken = async () => {
       try {
+        // Solicita el token de acceso a Spotify
         const accessToken = await getAccessToken();
         setToken(accessToken);
+        // Guarda el token en el almacenamiento local para uso futuro
         localStorage.setItem('spotify_access_token', accessToken);
       } catch (err) {
+        // En caso de error, lo muestra en consola y actualiza el estado de error
         console.error('Error al obtener token:', err);
         setError('No se pudo conectar con Spotify. Por favor, intenta de nuevo más tarde.');
       }
@@ -129,14 +142,14 @@ const SearchPodcasts = (props) => {
     fetchToken();
   }, []);
 
-  // 2) BÚSQUEDA AUTOMÁTICA CUANDO YA TENEMOS TOKEN
+  // 2) BÚSQUEDA AUTOMÁTICA: se ejecuta cuando ya se dispone del token
   useEffect(() => {
     const fetchDefaultPodcasts = async () => {
       if (token) {
         setLoading(true);
         setError(null);
         try {
-          // Uso de searchTermOverride o "clase libre" como término predeterminado
+          // Usa searchTermOverride o "clase libre" como término predeterminado para la búsqueda
           const defaultTerm = searchTermOverride || 'clase libre';
           const podcasts = await searchPodcasts(token, defaultTerm);
           setResults(podcasts);
@@ -152,7 +165,7 @@ const SearchPodcasts = (props) => {
     fetchDefaultPodcasts();
   }, [token, searchTermOverride]);
 
-  // Reutilizamos la misma función para búsquedas manuales
+  // Función para realizar búsquedas manuales utilizando el término ingresado
   const performSearch = async (term) => {
     if (term && token) {
       setLoading(true);
@@ -169,23 +182,14 @@ const SearchPodcasts = (props) => {
     }
   };
 
-  // Event handler de búsqueda manual
+  // Manejador del evento de búsqueda manual, evitando búsquedas vacías
   const handleSearch = async (e) => {
     e.preventDefault();
-    if (searchTerm.trim() === '') return; // No buscar si el campo está vacío
+    if (searchTerm.trim() === '') return; // No realizar búsqueda si el campo está vacío
     await performSearch(searchTerm);
   };
 
-  // Navigation handler
-  const viewPodcastDetails = (podcastId) => {
-    if (!podcastId) {
-      console.error('ID del podcast no encontrado');
-      return;
-    }
-    navigate(`${podcastId}`);
-  };
-
-  // Conditional rendering for error messages ❓
+  // Función para renderizar un mensaje de error en caso de que ocurra algún problema
   const renderErrorMessage = () => {
     if (error) {
       return (
@@ -203,14 +207,16 @@ const SearchPodcasts = (props) => {
     return null;
   };
 
+  // Renderizado principal del componente
   return (
     <ThemeProvider theme={spotifyTheme}>
-      <CssBaseline />
+      <CssBaseline /> {/* Resetea y normaliza estilos CSS */}
       <Box sx={{ 
         minHeight: '100vh',
         background: 'linear-gradient(to bottom, #3366CC, #121212 30%)'
       }}>
         <Container maxWidth="lg" sx={{ pt: 3, pb: 10 }}>
+          {/* Título principal de la sección */}
           <Typography 
             variant="h4" 
             component="h1" 
@@ -225,7 +231,7 @@ const SearchPodcasts = (props) => {
             Descubre Podcasts en Spotify
           </Typography>
           
-          {/* Mostrar la barra de búsqueda solo si no se debe ocultar */}
+          {/* Se muestra la barra de búsqueda solo si no se debe ocultar */}
           {!shouldHideSearchBar && (
             <Box 
               component="form" 
@@ -267,15 +273,17 @@ const SearchPodcasts = (props) => {
             </Box>
           )}
 
+          {/* Renderiza un mensaje de error si existe */}
           {renderErrorMessage()}
 
+          {/* Indicador de carga para mostrar mientras se obtienen resultados */}
           {loading && (
             <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
               <CircularProgress color="primary" />
             </Box>
           )}
 
-          {/* Three cards in a row with full width */}
+          {/* Renderiza los resultados en un layout de tres tarjetas por fila */}
           <Grid container spacing={3} sx={{ width: '100%' }}>
             {(maxItems ? results.slice(0, maxItems) : results).map((podcast) => (
               <Grid item xs={12} sm={6} md={4} key={podcast.id} sx={{ width: '100%' }}>
@@ -284,18 +292,20 @@ const SearchPodcasts = (props) => {
                   display: 'flex', 
                   flexDirection: 'column',
                   bgcolor: 'background.paper',
-                  width: '100%', // Ensure full width
+                  width: '100%', // Asegura que la card ocupe todo el ancho disponible
                 }}>
+                  {/* Imagen representativa del podcast */}
                   <CardMedia
                     component="img"
                     image={podcast.images?.[0]?.url || 'default-podcast.jpg'}
                     alt={podcast.name}
                     sx={{ 
-                      height: 180, // Slightly taller image
+                      height: 180, // Imagen con altura definida
                       objectFit: 'cover',
-                      width: '100%', // Full width image
+                      width: '100%', // Imagen a ancho completo
                     }}
                   />
+                  {/* Contenido principal de la card: título y descripción */}
                   <CardContent sx={{ flexGrow: 1, p: 3 }}>
                     <Typography 
                       variant="h6" 
@@ -326,11 +336,13 @@ const SearchPodcasts = (props) => {
                       {podcast.description}
                     </Typography>
                   </CardContent>
+                  {/* Acciones disponibles para cada podcast: ver detalles o abrir en Spotify */}
                   <CardActions sx={{ p: 2, justifyContent: 'space-between' }}>
                     <Button 
                       size="medium"
                       startIcon={<InfoIcon />}
-                      onClick={() => viewPodcastDetails(`/podcasts/${podcast.id}`)}
+                      component={Link}
+                      to={`/podcasts/${podcast.id}`}
                       sx={{ 
                         color: 'text.primary',
                         fontSize: '0.85rem',
@@ -356,7 +368,7 @@ const SearchPodcasts = (props) => {
             ))}
           </Grid>
           
-          {/* Render conditional when no results */}
+          {/* Renderizado condicional en caso de no haber resultados y no estar en estado de carga ni error */}
           {results.length === 0 && !loading && !error && (
             <Box sx={{ textAlign: 'center', mt: 8, mb: 4 }}>
               <Typography variant="h6" sx={{ mb: 2 }}>
