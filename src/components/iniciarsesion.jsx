@@ -6,21 +6,26 @@ import { redirectToSpotifyAuth } from '../spotify/auth';
 function Login() {
   return (
     <Container 
-      maxWidth="sm" 
+      maxWidth={false} // Cambio para permitir que ocupe toda la pantalla
+      disableGutters={true} // Elimina el padding predeterminado
       sx={{ 
         display: 'flex', 
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
+        width: '100vw', // Asegura el ancho completo
         textAlign: 'center',
         background: 'linear-gradient(180deg, #121212 0%, #000000 100%)',
+        m: 0, // Sin márgenes
+        p: 0, // Sin padding
+        overflow: 'hidden' // Previene barras de desplazamiento
       }}
     >
       <img 
         src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Green.png" 
         alt="Spotify" 
-        style={{ width: '70%', marginBottom: '2rem' }}
+        style={{ width: '70%', maxWidth: '400px', marginBottom: '2rem' }}
       />
       
       <Typography 

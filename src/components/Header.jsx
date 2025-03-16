@@ -59,7 +59,7 @@ function Header() {
             variant="h6"
             noWrap
             component="a"
-            href="/home"
+            href="/"
             sx={{
               mr: 4,
               display: { xs: "none", md: "flex" },
@@ -143,6 +143,27 @@ function Header() {
           >
             <Button
               component={Link}
+              to="/"
+              onClick={handleCloseNavMenu}
+              sx={{ 
+                color: "#FFFFFF", 
+                display: "flex", 
+                alignItems: "center",
+                fontWeight: 600,
+                borderRadius: "50px",
+                px: 3,
+                py: 1,
+                transition: "all 0.3s",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  transform: "translateY(-2px)"
+                }
+              }}
+            >
+              Inicio
+            </Button>
+            <Button
+              component={Link}
               to="/artists"
               onClick={handleCloseNavMenu}
               sx={{ 
@@ -164,7 +185,7 @@ function Header() {
             </Button>
             <Button
               component={Link}
-              to="/playlists"
+              to="/tracks"
               onClick={handleCloseNavMenu}
               sx={{ 
                 color: "#FFFFFF", 
@@ -181,7 +202,28 @@ function Header() {
                 }
               }}
             >
-              Playlists
+              Canciones
+            </Button>
+            <Button
+              component={Link}
+              to="/podcasts"
+              onClick={handleCloseNavMenu}
+              sx={{ 
+                color: "#FFFFFF", 
+                display: "flex", 
+                alignItems: "center",
+                fontWeight: 600,
+                borderRadius: "50px",
+                px: 3,
+                py: 1,
+                transition: "all 0.3s",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.1)",
+                  transform: "translateY(-2px)"
+                }
+              }}
+            >
+              PodCasts
             </Button>
           </Box>
 
@@ -251,6 +293,15 @@ function Header() {
                   px: 1
                 }}>
                   About Me
+                </Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/login" onClick={handleCloseUserMenu}>
+                <Typography sx={{ 
+                  color: "#FFFFFF", 
+                  fontWeight: 500,
+                  px: 1
+                }}>
+                  Iniciar Sesion
                 </Typography>
               </MenuItem>
             </Menu>
